@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>甩锅利器 - Cloudflare 错误页面生成器</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <h1>甩锅利器</h1>
+    <p>Cloudflare 错误页面生成器</p>
+  </header>
+
+  <main class="app-main">
+    <!-- Configuration Panel -->
+    <section class="config-panel">
+      <h2>配置</h2>
+      
+      <!-- Error Code Selector -->
+      <div class="form-group">
+        <label for="error-code">错误代码</label>
+        <select id="error-code">
+          <option value="500">500 - Internal Server Error</option>
+          <option value="502" selected>502 - Bad Gateway</option>
+          <option value="503">503 - Service Temporarily Unavailable</option>
+          <option value="504">504 - Gateway Timeout</option>
+          <option value="520">520 - Web Server Returned an Unknown Error</option>
+          <option value="521">521 - Web Server Is Down</option>
+          <option value="522">522 - Connection Timed Out</option>
+          <option value="523">523 - Origin Is Unreachable</option>
+          <option value="524">524 - A Timeout Occurred</option>
+          <option value="525">525 - SSL Handshake Failed</option>
+          <option value="526">526 - Invalid SSL Certificate</option>
+          <option value="527">527 - Railgun Error</option>
+        </select>
+      </div>
+
+      <!-- Domain Name Input -->
+      <div class="form-group">
+        <label for="domain-name">域名</label>
+        <input type="text" id="domain-name" placeholder="example.com">
+      </div>
+
+      <!-- Ray ID Input with Generate Button -->
+      <div class="form-group">
+        <label for="ray-id">Ray ID</label>
+        <div class="input-group">
+          <input type="text" id="ray-id" placeholder="自动生成或手动输入">
+          <button type="button" id="generate-ray-id" class="btn btn-secondary btn-sm">生成</button>
+        </div>
+      </div>
+
+      <!-- Custom Message Textarea -->
+      <div class="form-group">
+        <label for="custom-message">自定义消息 (可选)</label>
+        <textarea id="custom-message" placeholder="添加自定义错误消息..."></textarea>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <button type="button" id="copy-html" class="btn btn-secondary">复制 HTML</button>
+        <button type="button" id="export-html" class="btn btn-primary">导出文件</button>
+      </div>
+    </section>
+
+    <!-- Preview Panel -->
+    <section class="preview-panel">
+      <h2>预览</h2>
+      <div class="preview-container">
+        <iframe id="preview-frame" title="错误页面预览"></iframe>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast"></div>
+
+  <footer class="app-footer">
+    <p><a href="https://github.com" target="_blank">GitHub</a> | MIT License | 2024</p>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
