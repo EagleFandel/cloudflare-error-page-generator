@@ -6,7 +6,7 @@
 
 ## 在线演示
 
-👉 [点击体验](https://你的用户名.github.io/仓库名/src/)
+👉 [点击体验](https://eaglefandel.github.io/cloudflare-error-page-generator/src/)
 
 ## 功能特性
 
