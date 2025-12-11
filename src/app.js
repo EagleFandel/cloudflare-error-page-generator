@@ -17,6 +17,7 @@ let errorCodeSelect;
 let domainNameInput;
 let rayIdInput;
 let customMessageInput;
+let locationSelect;
 let generateRayIdBtn;
 let copyHtmlBtn;
 let exportHtmlBtn;
@@ -31,6 +32,7 @@ function initDomElements() {
   domainNameInput = document.getElementById('domain-name');
   rayIdInput = document.getElementById('ray-id');
   customMessageInput = document.getElementById('custom-message');
+  locationSelect = document.getElementById('cf-location');
   generateRayIdBtn = document.getElementById('generate-ray-id');
   copyHtmlBtn = document.getElementById('copy-html');
   exportHtmlBtn = document.getElementById('export-html');
@@ -102,6 +104,10 @@ function syncUIWithConfig(config) {
       document.activeElement !== customMessageInput) {
     customMessageInput.value = config.customMessage;
   }
+  
+  if (locationSelect && locationSelect.value !== config.location) {
+    locationSelect.value = config.location || 'Frankfurt';
+  }
 }
 
 /**
@@ -130,6 +136,13 @@ function handleRayIdChange() {
  */
 function handleCustomMessageChange() {
   updateConfig({ customMessage: customMessageInput.value });
+}
+
+/**
+ * Handle location selection change
+ */
+function handleLocationChange() {
+  updateConfig({ location: locationSelect.value });
 }
 
 /**
@@ -186,6 +199,11 @@ function bindEventListeners() {
   
   // Custom message input
   customMessageInput.addEventListener('input', handleCustomMessageChange);
+  
+  // Location selection
+  if (locationSelect) {
+    locationSelect.addEventListener('change', handleLocationChange);
+  }
   
   // Generate Ray ID button
   generateRayIdBtn.addEventListener('click', handleGenerateRayId);

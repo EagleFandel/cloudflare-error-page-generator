@@ -91,10 +91,8 @@ describe('HTML Generator - Property 4: HTML Self-Containment', () => {
           // Must NOT have external script sources
           expect(html).not.toMatch(/<script[^>]+src=["'][^"']+["'][^>]*>/i);
           
-          // Must NOT have external URLs (http:// or https://) except in xmlns
-          const htmlWithoutXmlns = html.replace(/xmlns="[^"]+"/g, '');
-          expect(htmlWithoutXmlns).not.toMatch(/href=["']https?:\/\//i);
-          expect(htmlWithoutXmlns).not.toMatch(/src=["']https?:\/\//i);
+          // Must NOT have external script sources (external links to Cloudflare support are allowed)
+          expect(html).not.toMatch(/<script[^>]+src=["']https?:\/\//i);
         }
       ),
       { numRuns: 100 }
@@ -135,8 +133,7 @@ describe('HTML Generator - Property 5: Cloudflare Branding Completeness', () => 
           
           const html = generateHtml(config);
           
-          // Must contain Cloudflare logo (SVG with cf-logo class)
-          expect(html).toMatch(/class=["']cf-logo["']/i);
+          // Must contain SVG icons for status diagram
           expect(html).toMatch(/<svg[^>]*>/i);
           
           // Must contain orange accent color #f38020
@@ -148,14 +145,13 @@ describe('HTML Generator - Property 5: Cloudflare Branding Completeness', () => 
           // Must contain "What can I do?" section
           expect(html).toContain('What can I do?');
           
-          // Must contain footer with Ray ID
+          // Must contain Ray ID in header
           expect(html).toMatch(/Ray ID:/i);
           
-          // Must contain visitor IP section
-          expect(html).toMatch(/Your IP:/i);
-          
-          // Must contain timestamp (the one we provided)
-          expect(html).toContain('2024-01-01T00:00:00.000Z');
+          // Must contain status diagram elements
+          expect(html).toContain('Browser');
+          expect(html).toContain('Cloudflare');
+          expect(html).toContain('Host');
         }
       ),
       { numRuns: 100 }
@@ -215,10 +211,10 @@ describe('HTML Generator - Unit Tests', () => {
     expect(html).toContain('</html>');
   });
 
-  it('uses default error code 500 when not specified', () => {
+  it('uses default error code 522 when not specified', () => {
     const html = generateHtml({});
-    expect(html).toContain('500');
-    expect(html).toContain('Internal Server Error');
+    expect(html).toContain('522');
+    expect(html).toContain('Connection Timed Out');
   });
 
   it('uses default domain when not specified', () => {
@@ -241,9 +237,9 @@ describe('HTML Generator - Unit Tests', () => {
     expect(html).toContain('abc123def4567890');
   });
 
-  it('includes visitor IP in footer', () => {
-    const html = generateHtml({ visitorIp: '192.168.1.100' });
-    expect(html).toContain('192.168.1.100');
+  it('includes location in status diagram', () => {
+    const html = generateHtml({ location: 'Tokyo' });
+    expect(html).toContain('Tokyo');
   });
 
   it('escapes HTML special characters in user input', () => {

@@ -19,8 +19,8 @@ describe('Configuration Manager Module', () => {
     it('should return default configuration on initialization', () => {
       const config = getConfig();
       
-      expect(config.errorCode).toBe('502');
-      expect(config.errorTitle).toBe('Bad Gateway');
+      expect(config.errorCode).toBe('522');
+      expect(config.errorTitle).toBe('Connection Timed Out');
       expect(config.domainName).toBe('example.com');
     });
 
@@ -59,7 +59,7 @@ describe('Configuration Manager Module', () => {
       const config = getConfig();
       
       expect(config.domainName).toBe('mysite.com');
-      expect(config.errorCode).toBe('502'); // Other values unchanged
+      expect(config.errorCode).toBe('522'); // Other values unchanged
     });
 
     it('should update error title and description when error code changes', () => {
@@ -169,8 +169,8 @@ describe('Configuration Manager Module', () => {
     it('should return default configuration object', () => {
       const defaults = getDefaultConfig();
       
-      expect(defaults.errorCode).toBe('502');
-      expect(defaults.errorTitle).toBe('Bad Gateway');
+      expect(defaults.errorCode).toBe('522');
+      expect(defaults.errorTitle).toBe('Connection Timed Out');
       expect(defaults.domainName).toBe('example.com');
       expect(defaults.customMessage).toBe('');
     });
@@ -180,7 +180,7 @@ describe('Configuration Manager Module', () => {
       defaults1.errorCode = '999';
       const defaults2 = getDefaultConfig();
       
-      expect(defaults2.errorCode).toBe('502');
+      expect(defaults2.errorCode).toBe('522');
     });
   });
 });

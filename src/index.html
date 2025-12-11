@@ -22,12 +22,12 @@
         <label for="error-code">错误代码</label>
         <select id="error-code">
           <option value="500">500 - Internal Server Error</option>
-          <option value="502" selected>502 - Bad Gateway</option>
+          <option value="502">502 - Bad Gateway</option>
           <option value="503">503 - Service Temporarily Unavailable</option>
           <option value="504">504 - Gateway Timeout</option>
           <option value="520">520 - Web Server Returned an Unknown Error</option>
           <option value="521">521 - Web Server Is Down</option>
-          <option value="522">522 - Connection Timed Out</option>
+          <option value="522" selected>522 - Connection Timed Out</option>
           <option value="523">523 - Origin Is Unreachable</option>
           <option value="524">524 - A Timeout Occurred</option>
           <option value="525">525 - SSL Handshake Failed</option>
@@ -49,6 +49,25 @@
           <input type="text" id="ray-id" placeholder="自动生成或手动输入">
           <button type="button" id="generate-ray-id" class="btn btn-secondary btn-sm">生成</button>
         </div>
+      </div>
+
+      <!-- Location Selector -->
+      <div class="form-group">
+        <label for="cf-location">Cloudflare 节点</label>
+        <select id="cf-location">
+          <option value="Frankfurt">Frankfurt</option>
+          <option value="Amsterdam">Amsterdam</option>
+          <option value="London">London</option>
+          <option value="Paris">Paris</option>
+          <option value="Singapore">Singapore</option>
+          <option value="Tokyo">Tokyo</option>
+          <option value="Hong Kong">Hong Kong</option>
+          <option value="Los Angeles">Los Angeles</option>
+          <option value="New York">New York</option>
+          <option value="San Francisco">San Francisco</option>
+          <option value="Sydney">Sydney</option>
+          <option value="Toronto">Toronto</option>
+        </select>
       </div>
 
       <!-- Custom Message Textarea -->

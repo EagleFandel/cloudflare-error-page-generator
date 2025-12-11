@@ -10,14 +10,15 @@ import { getErrorByCode } from './errorCodes.js';
  * Default configuration values
  */
 const DEFAULT_CONFIG = {
-  errorCode: '502',
-  errorTitle: 'Bad Gateway',
-  errorDescription: 'The server received an invalid response from the upstream server.',
+  errorCode: '522',
+  errorTitle: 'Connection Timed Out',
+  errorDescription: 'Cloudflare could not negotiate a TCP handshake with the origin server.',
   domainName: 'example.com',
   rayId: '',
   visitorIp: '',
   timestamp: '',
-  customMessage: ''
+  customMessage: '',
+  location: 'Frankfurt'
 };
 
 /**
