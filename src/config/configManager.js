@@ -22,45 +22,61 @@ const DEFAULT_CONFIG = {
 };
 
 /**
+ * Normalize configuration values and ensure consistent defaults
+ * @param {Object} config - Configuration object
+ * @returns {Object} Normalized configuration
+ */
+function normalizeConfig(config) {
+  const result = { ...config };
+  const fallbackError = getErrorByCode(DEFAULT_CONFIG.errorCode) || {
+    code: DEFAULT_CONFIG.errorCode,
+    title: DEFAULT_CONFIG.errorTitle,
+    description: DEFAULT_CONFIG.errorDescription
+  };
+
+  const requestedError = typeof result.errorCode === 'string' ? getErrorByCode(result.errorCode) : undefined;
+  const finalError = requestedError || fallbackError;
+
+  result.errorCode = finalError.code;
+  result.errorTitle = finalError.title;
+  result.errorDescription = finalError.description;
+
+  if (typeof result.domainName !== 'string' || result.domainName.trim() === '') {
+    result.domainName = DEFAULT_CONFIG.domainName;
+  }
+
+  if (typeof result.rayId !== 'string' || result.rayId.trim() === '') {
+    result.rayId = generateRayId();
+  }
+
+  if (typeof result.timestamp !== 'string' || result.timestamp.trim() === '') {
+    result.timestamp = new Date().toISOString();
+  }
+
+  if (typeof result.visitorIp !== 'string' || result.visitorIp.trim() === '') {
+    result.visitorIp = 'Not available';
+  }
+
+  if (typeof result.customMessage !== 'string') {
+    result.customMessage = '';
+  }
+
+  if (typeof result.location !== 'string' || result.location.trim() === '') {
+    result.location = DEFAULT_CONFIG.location;
+  }
+
+  return result;
+}
+
+/**
  * Current configuration state
  */
-let currentConfig = { ...DEFAULT_CONFIG };
+let currentConfig = normalizeConfig(DEFAULT_CONFIG);
 
 /**
  * List of change listeners
  */
 let changeListeners = [];
-
-/**
- * Apply default values for empty fields
- * @param {Object} config - Configuration object
- * @returns {Object} Configuration with defaults applied
- */
-function applyDefaults(config) {
-  const result = { ...config };
-  
-  // Apply default domain if empty
-  if (!result.domainName || result.domainName.trim() === '') {
-    result.domainName = DEFAULT_CONFIG.domainName;
-  }
-  
-  // Generate Ray ID if empty
-  if (!result.rayId || result.rayId.trim() === '') {
-    result.rayId = generateRayId();
-  }
-  
-  // Generate timestamp if empty
-  if (!result.timestamp || result.timestamp.trim() === '') {
-    result.timestamp = new Date().toISOString();
-  }
-  
-  // Apply default visitor IP placeholder if empty
-  if (!result.visitorIp || result.visitorIp.trim() === '') {
-    result.visitorIp = 'Not available';
-  }
-  
-  return result;
-}
 
 /**
  * Notify all registered listeners of config change
@@ -78,10 +94,10 @@ function notifyListeners(config) {
 
 /**
  * Get the current configuration
- * @returns {Object} Current configuration with defaults applied
+ * @returns {Object} Current normalized configuration
  */
 export function getConfig() {
-  return applyDefaults({ ...currentConfig });
+  return { ...currentConfig };
 }
 
 /**
@@ -89,20 +105,11 @@ export function getConfig() {
  * @param {Object} partial - Partial configuration to merge
  */
 export function updateConfig(partial) {
-  if (!partial || typeof partial !== 'object') {
+  if (!partial || typeof partial !== 'object' || Array.isArray(partial)) {
     return;
   }
-  
-  // If error code is being updated, also update title and description
-  if (partial.errorCode && partial.errorCode !== currentConfig.errorCode) {
-    const errorDetails = getErrorByCode(partial.errorCode);
-    if (errorDetails) {
-      partial.errorTitle = errorDetails.title;
-      partial.errorDescription = errorDetails.description;
-    }
-  }
-  
-  currentConfig = { ...currentConfig, ...partial };
+
+  currentConfig = normalizeConfig({ ...currentConfig, ...partial });
   notifyListeners(getConfig());
 }
 
@@ -110,7 +117,7 @@ export function updateConfig(partial) {
  * Reset configuration to default values
  */
 export function resetToDefaults() {
-  currentConfig = { ...DEFAULT_CONFIG };
+  currentConfig = normalizeConfig(DEFAULT_CONFIG);
   notifyListeners(getConfig());
 }
 

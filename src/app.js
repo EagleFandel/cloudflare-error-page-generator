@@ -5,8 +5,8 @@
  * Requirements: 1.1, 1.3, 2.3, 4.1, 6.2, 6.3, 8.2
  */
 
-import { ERROR_CODES, getErrorByCode } from './config/errorCodes.js';
-import { getConfig, updateConfig, onConfigChange, resetToDefaults } from './config/configManager.js';
+import { ERROR_CODES } from './config/errorCodes.js';
+import { getConfig, updateConfig, onConfigChange } from './config/configManager.js';
 import { generateRayId } from './generators/rayId.js';
 import { generateHtml } from './generators/html.js';
 import { copyToClipboard } from './utils/clipboard.js';
@@ -128,7 +128,11 @@ function handleDomainNameChange() {
  * Handle Ray ID input change
  */
 function handleRayIdChange() {
-  updateConfig({ rayId: rayIdInput.value });
+  const normalizedRayId = rayIdInput.value.trim() || generateRayId();
+  if (rayIdInput.value !== normalizedRayId) {
+    rayIdInput.value = normalizedRayId;
+  }
+  updateConfig({ rayId: normalizedRayId });
 }
 
 /**
@@ -249,7 +253,6 @@ function init() {
   // Initial preview render
   updatePreview(getConfig());
   
-  console.log('甩锅利器 - Cloudflare Error Page Generator initialized');
 }
 
 // Initialize when DOM is ready

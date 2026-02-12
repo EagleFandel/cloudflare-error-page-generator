@@ -3,7 +3,7 @@
  * Generates Cloudflare-style error pages as complete standalone HTML
  */
 
-import { getErrorByCode, ERROR_CODES } from '../config/errorCodes.js';
+import { getErrorByCode } from '../config/errorCodes.js';
 
 /**
  * Generate inline CSS styles for the error page (Cloudflare authentic style)
@@ -340,15 +340,15 @@ function escapeHtml(str) {
  * @returns {string} Formatted time string
  */
 function formatTimestamp(timestamp) {
-  try {
-    const date = new Date(timestamp);
-    const hours = date.getUTCHours().toString().padStart(2, '0');
-    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
-    const seconds = date.getUTCSeconds().toString().padStart(2, '0');
-    return `${hours}:${minutes}:${seconds} UTC`;
-  } catch {
+  const date = new Date(timestamp);
+  if (Number.isNaN(date.getTime())) {
     return new Date().toISOString().split('T')[1].split('.')[0] + ' UTC';
   }
+
+  const hours = date.getUTCHours().toString().padStart(2, '0');
+  const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+  const seconds = date.getUTCSeconds().toString().padStart(2, '0');
+  return `${hours}:${minutes}:${seconds} UTC`;
 }
 
 /**

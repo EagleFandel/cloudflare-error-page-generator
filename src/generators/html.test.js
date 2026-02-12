@@ -242,6 +242,12 @@ describe('HTML Generator - Unit Tests', () => {
     expect(html).toContain('Tokyo');
   });
 
+  it('falls back to current UTC time when timestamp is invalid', () => {
+    const html = generateHtml({ timestamp: 'not-a-date' });
+    expect(html).not.toContain('NaN:NaN:NaN UTC');
+    expect(html).toMatch(/\d{2}:\d{2}:\d{2} UTC/);
+  });
+
   it('escapes HTML special characters in user input', () => {
     const html = generateHtml({ 
       domainName: '<script>alert("xss")</script>',

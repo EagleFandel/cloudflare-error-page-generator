@@ -1,6 +1,6 @@
 {
   "name": "cloudflare-error-page-generator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "甩锅利器 - Cloudflare 风格错误页面生成器",
   "type": "module",
   "scripts": {

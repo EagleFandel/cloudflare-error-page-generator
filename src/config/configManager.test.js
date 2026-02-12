@@ -46,6 +46,14 @@ describe('Configuration Manager Module', () => {
       expect(config.timestamp.length).toBeGreaterThan(0);
     });
 
+    it('should keep generated defaults stable across repeated reads', () => {
+      const firstRead = getConfig();
+      const secondRead = getConfig();
+
+      expect(secondRead.rayId).toBe(firstRead.rayId);
+      expect(secondRead.timestamp).toBe(firstRead.timestamp);
+    });
+
     it('should apply default visitor IP when empty', () => {
       const config = getConfig();
       
@@ -87,11 +95,29 @@ describe('Configuration Manager Module', () => {
       expect(config.rayId).toBe(customRayId);
     });
 
+    it('should regenerate and persist Ray ID when empty value is provided', () => {
+      updateConfig({ rayId: '' });
+      const firstRead = getConfig();
+      const secondRead = getConfig();
+
+      expect(firstRead.rayId).toMatch(/^[0-9a-f]{16}$/);
+      expect(secondRead.rayId).toBe(firstRead.rayId);
+    });
+
     it('should update custom message', () => {
       updateConfig({ customMessage: 'Server maintenance in progress' });
       const config = getConfig();
       
       expect(config.customMessage).toBe('Server maintenance in progress');
+    });
+
+    it('should fall back to default error details when invalid error code is provided', () => {
+      updateConfig({ errorCode: '999' });
+      const config = getConfig();
+
+      expect(config.errorCode).toBe('522');
+      expect(config.errorTitle).toBe('Connection Timed Out');
+      expect(config.errorDescription).toBe('Cloudflare could not negotiate a TCP handshake with the origin server.');
     });
   });
 
